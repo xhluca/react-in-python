@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.17.0/full/pyodide.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <script type="text/javascript">
+        async function main() {
+            await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.17.0/full/"
+            });
+
+            pyodide.runPythonAsync(`
+            import js
+            import pyodide
+
+            # shorthand
+            e = js.React.createElement
+
+            # helper function
+            def di_to_obj(**kwargs):
+                return js.Object.fromEntries(pyodide.to_js(kwargs))
+
+            # Create a div to contain our component
+            dom_container = js.document.createElement('div')
+            dom_container.className = "container"
+            js.document.body.appendChild(dom_container)
+
+            # React component starts here
+            def MyComponent(props, children):
+                val, set_val = js.React.useState(0)
+
+                def handle_click(event):
+                    set_val(val + 1)
+                
+                return e(
+                    "button", 
+                    di_to_obj(onClick=handle_click, className="btn btn-primary"),
+                    f"Clicked {val} times",
+                )
+
+            js.ReactDOM.render(e(MyComponent, None), dom_container)
+        `);
+        }
+        main();
+    </script>
+</body>
+
+</html>
