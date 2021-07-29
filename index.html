@@ -16,36 +16,36 @@
             });
 
             pyodide.runPythonAsync(`
-            import js
-            import pyodide
+                import js
+                import pyodide
 
-            # shorthand
-            e = js.React.createElement
+                # shorthand
+                e = js.React.createElement
 
-            # helper function
-            def di_to_obj(**kwargs):
-                return js.Object.fromEntries(pyodide.to_js(kwargs))
+                # helper function
+                def di_to_obj(**kwargs):
+                    return js.Object.fromEntries(pyodide.to_js(kwargs))
 
-            # Create a div to contain our component
-            dom_container = js.document.createElement('div')
-            dom_container.className = "container"
-            js.document.body.appendChild(dom_container)
+                # Create a div to contain our component
+                dom_container = js.document.createElement('div')
+                dom_container.className = "container"
+                js.document.body.appendChild(dom_container)
 
-            # React component starts here
-            def MyComponent(props, children):
-                val, set_val = js.React.useState(0)
+                # React component starts here
+                def MyComponent(props, children):
+                    val, set_val = js.React.useState(0)
 
-                def handle_click(event):
-                    set_val(val + 1)
-                
-                return e(
-                    "button", 
-                    di_to_obj(onClick=handle_click, className="btn btn-primary"),
-                    f"Clicked {val} times",
-                )
+                    def handle_click(event):
+                        set_val(val + 1)
+                    
+                    return e(
+                        "button", 
+                        di_to_obj(onClick=handle_click, className="btn btn-primary"),
+                        f"Clicked {val} times",
+                    )
 
-            js.ReactDOM.render(e(MyComponent, None), dom_container)
-        `);
+                js.ReactDOM.render(e(MyComponent, None), dom_container)
+            `);
         }
         main();
     </script>
